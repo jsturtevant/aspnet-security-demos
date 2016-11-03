@@ -14,6 +14,7 @@ using aspnetcore.Models;
 using aspnetcore.Services;
 using aspnetcore.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace aspnetcore
 {
@@ -58,6 +59,35 @@ namespace aspnetcore
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = false;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+
+                // Cookie settings
+                options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromDays(150);
+                options.Cookies.ApplicationCookie.LoginPath = "/Account/LogIn";
+                options.Cookies.ApplicationCookie.LogoutPath = "/Account/LogOff";
+
+                //options.Cookies.ApplicationCookie.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                //options.Cookies.ApplicationCookie.CookieSecure =CookieSecurePolicy.Always;
+                //options.Cookies.ApplicationCookie.SlidingExpiration = true;
+                //options.Cookies.ApplicationCookie.CookieHttpOnly = true;
+
+
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();

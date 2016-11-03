@@ -11,7 +11,7 @@ namespace aspnet45
         {
             ConfigureAuth(app);
 
-            app.UseHsts(options => options.MaxAge(days: 30).IncludeSubdomains());
+            app.UseHsts(options => options.MaxAge(minutes: 2).IncludeSubdomains());
             //app.UseHsts(options => options.MaxAge(days:365).IncludeSubdomains().Preload());
             //app.UseHsts(options => options.MaxAge(days:365).UpgradeInsecureRequests());
 

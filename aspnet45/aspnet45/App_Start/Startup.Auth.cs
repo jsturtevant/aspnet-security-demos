@@ -33,7 +33,12 @@ namespace aspnet45
                     OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
-                }
+                },
+                //SlidingExpiration = false,
+                //ExpireTimeSpan = TimeSpan.FromMinutes(30)
+                //CookieHttpOnly = true,
+                //CookieSecure = CookieSecureOption.Always
+                //http://www.jamessturtevant.com/posts/ASPNET-Identity-Cookie-Authentication-Timeouts/
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
