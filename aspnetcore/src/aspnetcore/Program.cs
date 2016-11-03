@@ -13,6 +13,7 @@ namespace aspnetcore
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
+                //.UseKestrel(k => k.AddServerHeader = false)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()
