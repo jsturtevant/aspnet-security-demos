@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
 using Microsoft.EntityFrameworkCore;
+using aspnetcore.Authorization;
+using aspnetcore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace aspnetcore.Controllers
 {
@@ -14,15 +17,19 @@ namespace aspnetcore.Controllers
         HtmlEncoder _htmlEncoder;
         JavaScriptEncoder _javaScriptEncoder;
         UrlEncoder _urlEncoder;
+        private readonly IAuthorizationService _authService;
 
         public HomeController(HtmlEncoder htmlEncoder,
                               JavaScriptEncoder javascriptEncoder,
-                              UrlEncoder urlEncoder)
+                              UrlEncoder urlEncoder, IAuthorizationService authService)
         {
             _htmlEncoder = htmlEncoder;
             _javaScriptEncoder = javascriptEncoder;
             _urlEncoder = urlEncoder;
+            _authService = authService;
         }
+
+        
 
         public IActionResult Car()
         {
@@ -54,7 +61,18 @@ namespace aspnetcore.Controllers
             return View();
         }
 
-        
+
+        public async Task<IActionResult> SendEmail()
+        {
+            if (!await _authService.AuthorizeAsync(User, new Email(), requirement: new AdminEmailRequirement()))
+            {
+                return new ChallengeResult();
+            }
+
+            //else send email
+            return View("Contact");
+        }
+
     }
 
     public class Car

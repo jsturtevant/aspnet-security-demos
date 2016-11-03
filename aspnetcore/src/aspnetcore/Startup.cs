@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using aspnetcore.Data;
 using aspnetcore.Models;
 using aspnetcore.Services;
+using aspnetcore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace aspnetcore
 {
@@ -47,6 +49,9 @@ namespace aspnetcore
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+
+            services.AddTransient<IAuthorizationHandler, AdminEmailHandler>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
