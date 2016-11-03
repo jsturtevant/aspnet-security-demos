@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
+using Microsoft.EntityFrameworkCore;
 
 namespace aspnetcore.Controllers
 {
@@ -21,6 +22,12 @@ namespace aspnetcore.Controllers
             _htmlEncoder = htmlEncoder;
             _javaScriptEncoder = javascriptEncoder;
             _urlEncoder = urlEncoder;
+        }
+
+        public IActionResult Car()
+        {
+            var encodedName = _htmlEncoder.Encode("lamborghini");
+            return View(new Car() { Id = 1, Name = encodedName });
         }
 
         public IActionResult Index()
@@ -47,17 +54,22 @@ namespace aspnetcore.Controllers
             return View();
         }
 
-        public IActionResult Car()
-        {
-            var encodedName = _htmlEncoder.Encode("lamborghini");
-            return View(new Car() {Id = 1, Name = });
-            
-        }
+        
     }
 
     public class Car
     {
         public int Id { get; set; }
         public string Name { get; set; }
+    }
+
+    public class CarContext : DbContext
+    {
+        public CarContext()
+            : base()
+        {
+        }
+
+        public DbSet<Car> Cars { get; set; }
     }
 }
